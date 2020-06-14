@@ -22,8 +22,11 @@ class NewTransaction extends StatelessWidget {
               controller: titleController,
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Amount'),
+              decoration: InputDecoration(
+                labelText: 'Amount',
+              ),
               controller: amountController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
             FlatButton(
               child: Text('Add Transaction'),
@@ -31,7 +34,8 @@ class NewTransaction extends StatelessWidget {
               onPressed: () => onAddTransaction(Transaction(
                 id: DateTime.now().toString(),
                 title: titleController.text,
-                amount: double.parse(amountController.text),
+                amount:
+                    double.parse(amountController.text.replaceAll(',', '.')),
                 date: DateTime.now(),
               )),
             )
