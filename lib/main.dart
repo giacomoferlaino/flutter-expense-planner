@@ -9,21 +9,26 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final String _title = "Personal Expenses";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: _title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(),
+      home: MyHomePage(_title),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  final String _title;
+
+  MyHomePage(this._title);
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -62,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter App'),
+        title: Text(widget._title),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
