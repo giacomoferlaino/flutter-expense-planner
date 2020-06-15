@@ -13,7 +13,6 @@ class Chart extends StatelessWidget {
     return List.generate(7, (index) {
       final weekDay = DateTime.now().subtract(Duration(days: index));
       double totalSum = 0.0;
-
       for (var transaction in _recentTransactions) {
         if (transaction.date.day == weekDay.day &&
             transaction.date.month == weekDay.month &&

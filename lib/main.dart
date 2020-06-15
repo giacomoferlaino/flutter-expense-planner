@@ -26,6 +26,9 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
+              button: TextStyle(
+                color: Colors.white,
+              ),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
@@ -70,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _startTransactionModal(BuildContext context) {
+  void _showTransactionModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (builderContext) {
@@ -86,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => _startTransactionModal(context),
+            onPressed: () => _showTransactionModal(context),
           )
         ],
       ),
@@ -102,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _startTransactionModal(context),
+        onPressed: () => _showTransactionModal(context),
       ),
     );
   }
