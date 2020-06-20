@@ -60,8 +60,14 @@ class _NewTransactionState extends State<NewTransaction> {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.only(
+          top: 10,
+          left: 10,
+          right: 10,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             TextField(
@@ -78,7 +84,6 @@ class _NewTransactionState extends State<NewTransaction> {
               onSubmitted: (_) => _addTransaction(),
             ),
             Container(
-              height: 70,
               child: Row(
                 children: <Widget>[
                   Expanded(
