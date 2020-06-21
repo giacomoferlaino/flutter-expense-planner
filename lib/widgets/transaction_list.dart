@@ -7,7 +7,7 @@ class TransactionList extends StatelessWidget {
   final List<Transaction> _transactions;
   final Function(String id) _deleteTransaction;
 
-  TransactionList(this._transactions, this._deleteTransaction);
+  const TransactionList(this._transactions, this._deleteTransaction);
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +60,8 @@ class TransactionList extends StatelessWidget {
                           onPressed: () =>
                               _deleteTransaction(_transactions[index].id),
                           textColor: Theme.of(context).errorColor,
-                          icon: Icon(Icons.delete),
-                          label: Text("Delete"),
+                          icon: const Icon(Icons.delete),
+                          label: const Text("Delete"),
                         )
                       : IconButton(
                           icon: Icon(Icons.delete),
