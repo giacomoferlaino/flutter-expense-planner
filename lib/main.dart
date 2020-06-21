@@ -107,68 +107,116 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Widget _buildTransactionListWidget(MediaQueryData mediaQuery,
+          PreferredSizeWidget appBar, double heightPercentage) =>
+      Container(
+        height: (mediaQuery.size.height) * heightPercentage -
+            appBar.preferredSize.height -
+            mediaQuery.padding.top,
+        child: TransactionList(_recentTransaction, _deleteTransaction),
+      );
+
+  Widget _buildChartWidget(MediaQueryData mediaQuery,
+          PreferredSizeWidget appBar, double heightPercentage) =>
+      Container(
+        height: (mediaQuery.size.height) * heightPercentage -
+            appBar.preferredSize.height -
+            mediaQuery.padding.top,
+        child: Chart(_transactions),
+      );
+
+  List<Widget> _buildLandscapeContent(
+    MediaQueryData mediaQuery,
+    PreferredSizeWidget appBar,
+  ) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Show Chart',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Switch.adaptive(
+            activeColor: Theme.of(context).accentColor,
+            value: _showChart,
+            onChanged: toggleChart,
+          ),
+        ],
+      ),
+      _showChart
+          ? _buildChartWidget(
+              mediaQuery,
+              appBar,
+              0.7,
+            )
+          : _buildTransactionListWidget(
+              mediaQuery,
+              appBar,
+              0.7,
+            ),
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+    MediaQueryData mediaQuery,
+    PreferredSizeWidget appBar,
+  ) {
+    return [
+      _buildChartWidget(
+        mediaQuery,
+        appBar,
+        0.3,
+      ),
+      _buildTransactionListWidget(
+        mediaQuery,
+        appBar,
+        0.7,
+      ),
+    ];
+  }
+
+  PreferredSizeWidget _buildCupertinoAppBar() {
+    return CupertinoNavigationBar(
+      middle: Text(widget._title),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            child: Icon(CupertinoIcons.add),
+            onTap: () => _showTransactionModal(context),
+          )
+        ],
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildMaterialAppBar() {
+    return AppBar(
+      title: Text(widget._title),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _showTransactionModal(context),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final PreferredSizeWidget appBar = Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: Text(widget._title),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                GestureDetector(
-                  child: Icon(CupertinoIcons.add),
-                  onTap: () => _showTransactionModal(context),
-                )
-              ],
-            ),
-          )
-        : AppBar(
-            title: Text(widget._title),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _showTransactionModal(context),
-              )
-            ],
-          );
-    getTransactionListWidget(double heightPercentage) => Container(
-          height: (mediaQuery.size.height) * heightPercentage -
-              appBar.preferredSize.height -
-              mediaQuery.padding.top,
-          child: TransactionList(_recentTransaction, _deleteTransaction),
-        );
-    getChartWidget(double heightPercentage) => Container(
-          height: (mediaQuery.size.height) * heightPercentage -
-              appBar.preferredSize.height -
-              mediaQuery.padding.top,
-          child: Chart(_transactions),
-        );
+    final PreferredSizeWidget appBar =
+        Platform.isIOS ? _buildCupertinoAppBar() : _buildMaterialAppBar();
+
     final pageBody = SafeArea(
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Show Chart',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Switch.adaptive(
-                    activeColor: Theme.of(context).accentColor,
-                    value: _showChart,
-                    onChanged: toggleChart,
-                  ),
-                ],
-              ),
-            if (!isLandscape) getChartWidget(0.3),
-            if (!isLandscape) getTransactionListWidget(0.7),
-            if (isLandscape)
-              _showChart ? getChartWidget(0.7) : getTransactionListWidget(0.7),
+            if (isLandscape) ..._buildLandscapeContent(mediaQuery, appBar),
+            if (!isLandscape) ..._buildPortraitContent(mediaQuery, appBar),
           ],
         ),
       ),
